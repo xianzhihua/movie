@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>冼智铧</title>
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link href="__STATIC__/index/css/style.css" rel="stylesheet">
+	<script>
+	window.onload=function(){
+		$(document).bind("contextmenu",function(e){   
+		    return false;   
+		});
+		$(document).keydown(function (e) {
+		    e = window.event || e || e.which;
+		    if (e.keyCode == 123 || e.ctrlKey && e.which == 85 || e.ctrlKey && e.which == 83) {
+		        e.keyCode = 0;
+		        return false;
+		    }
+		});
+	}
+	</script>
+	<style>
+	.icon{
+	    background: url(__STATIC__/index/img/play-icon.png) no-repeat;
+	}
+	.gongao{
+	 	background: url(__STATIC__/index/img/gongao.jpg) no-repeat;
+	}
+	</style>
+</head>
+<body>
+{include file="common/top" /}
+
+<div class="gongao">
+	本站一切以学习为目的，不用做任何商业用途，如有侵权，请联系QQ1103223758。
+</div>
+
+<div class="container">
+	<div class="row">
+		{volist name="data" id="vo"}
+		<div class="col-xs-6 col-sm-4  col-md-3 col-lg-2">
+			<a href="{:url('video/index',array('id'=>$vo['id']))}" target="_blank">
+			<div class="col-img">
+				<div>
+					<div class="icon"></div>
+					<img src="{$vo.img}">
+					{if condition="$vo.num"}
+						<p>{$vo.num}</p>
+					{/if}
+				</div>
+				<p>{$vo.title}</p>
+		        {if condition="$vo.des"}
+		        	<p>{$vo.des}</p>
+		        {else /}
+					<p>无描述</p>
+		        {/if}
+				<p class="score">{$vo.score}</p>
+			</div>
+			</a>
+		</div>
+		{/volist}
+	</div>
+	<div class="text-center load_more">加载更多</div>
+</div>
+
+
+<script>
+
+//加载更多留言
+var count = {$count};
+var page = 2;
+if (page > count) {
+	$('.load_more').off('click');
+	$('.load_more').hide();
+}
+$('.load_more').on('click', function () {
+	var length = $('.col-sm-2').length+1;
+	$('.load_more').attr('disabled',"true");//防止连续点击出现的BuG
+	$.ajax({
+		url : "{:url('index/more/index')}",
+		type : 'POST',
+		data : {
+			page : page,
+			classid : {$classid},
+		},
+		beforeSend : function (jqXHR, settings) {
+			$('.load_more').html('<div class="spinner"><div class="spinner-container container1"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container2"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container3"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div></div>');
+		},
+		success : function (response, status) {
+			var json = $.parseJSON(response);
+			$.each(json, function (index, value) {
+				var div = '';
+				div+='<div class="col-xs-6 col-sm-4  col-md-3 col-lg-2">';
+				div+='	<a href="{:url('video/index')}?id='+value.id+'" target="_blank">';
+				div+='	<div class="col-img">';
+				div+='		<div>';
+				div+='			<div class="icon"></div>';
+				div+='			<img src="'+value.img+'">';
+								if(value.num){
+				div+='				<p>'+value.num+'</p>';
+								}
+				div+='		</div>';
+				div+='		<p>'+value.title+'</p>';
+								if(value.des){
+				div+='        	<p>'+value.des+'</p>';
+								}else{
+				div+='			<p>无描述</p>';
+								}
+				div+='		<p class="score">'+value.score+'</p>';
+				div+='	</div>';
+				div+='	</a>';
+				div+='</div>';
+				$('.row').append(div);
+			})
+			$('.load_more').removeAttr("disabled");//---
+			$('.load_more').html('加载更多');
+			page++;
+			if (page > count) {
+				$('.load_more').off('click');
+				$('.load_more').hide();
+			}
+		}
+	});
+});
+</script>
+</body>
+</html>

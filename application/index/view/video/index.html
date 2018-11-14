@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>{$data.title}</title>
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link href="__STATIC__/index/css/style.css" rel="stylesheet">
+	<script src="__STATIC__/index/js/index.js"></script>
+	<script>
+		window.onload=function(){
+			$(document).bind("contextmenu",function(e){   
+			    return false;   
+			});
+			$(document).keydown(function (e) {
+			    e = window.event || e || e.which;
+			    if (e.keyCode == 123 || e.ctrlKey && e.which == 85 || e.ctrlKey && e.which == 83) {
+			        e.keyCode = 0;
+			        return false;
+			    }
+			});
+		}
+	</script>
+	<style>
+	.gongao{
+	  background: url(__STATIC__/index/img/gongao.jpg) no-repeat;
+	}
+	.dianzanok{
+		background-position: 0 -14px;
+	}
+	.xianlu-div{
+		display: flex;
+	}
+	.xianlu-div>div{
+		flex: 1;
+		border: none;
+		border-radius: 0;
+		text-align: center;
+		cursor: pointer;
+	}
+	</style>
+</head>
+<body style="background: url('__PUBLIC__/img/pc_bg.png')">
+{include file="common/top" /}
+
+<div class="gongao">请不要相信站内的广告，如有被骗，站主概不负责</div>
+
+{if condition="$datanum"}
+	<div class="container dianshi-container">
+		<iframe src="https://api.pangujiexi.com/player.php?url={$data.a}" data-a="{$data.a}" frameborder="0" width="75%" height="500"></iframe>
+		<div class="zk_div">
+			<span class="zk_bg" data-lock="on">
+				<svg fill="rgb(47,47,47)" viewBox="0 0 9 59" width="9" height="59">
+				<path d="M3.8,5.1C1.7,4.3,0.2,2.4,0,0h0v5v4v41v5v3.9c0.6-1.9,2.1-3.4,4-4v0c2.9-0.7,5-3.2,5-6.3v-37  C9,8.4,6.8,5.7,3.8,5.1z"></path>
+				</svg>
+				<svg fill="rgb(110,110,110)" viewBox="0 0 10 6" class="zk_btn" width="10" height="16" aria-hidden="true"><title></title><g><path d="M8.716.217L5.002 4 1.285.218C.99-.072.514-.072.22.218c-.294.29-.294.76 0 1.052l4.25 4.512c.292.29.77.29 1.063 0L9.78 1.27c.293-.29.293-.76 0-1.052-.295-.29-.77-.29-1.063 0z"></path></g></svg>
+			</span>
+		</div>
+		<div class="right">
+			<div class="js_div">
+			{volist name="datanum" id="datanum"}
+				<div class="js" data-a="{$datanum.a}"><i class="dijiji">{$datanum.num}</i> <i class="des">{$datanum.des}</i></div>
+			{/volist}
+			</div>
+		</div>
+	</div>
+	<div class="container con2">
+		<p class="title"><i>{$data.title}</i> <i class="num">{$data.num}</i></p>
+		<h6></h6>
+	</div>
+{else /}
+	<div class="container">
+		<iframe src="https://api.pangujiexi.com/player.php?url={$data.a}" data-a="{$data.a}" frameborder="0" width="100%" height="500"></iframe>
+	</div>
+{/if}
+	<div class="container xianlu-div">
+		<div class="alert alert-success" data-api="http://yun.6woaw.cn/yun.php?url=">线路1</div>
+		<div class="alert alert-info" data-api="http://api.xfsub.com/index.php?url=">线路2</div>
+		<div class="alert alert-warning" data-api="http://api.baiyug.vip/index.php?url=">线路3</div>
+		<div class="alert alert-danger" data-api="https://api.pangujiexi.com/player.php?url=">线路4</div>
+	</div>
+
+
+	<div class="container message-region">
+		<h4>评论<i class=" message_count"> ( {$allcount} ) <i class="pull-right">文明上网理性发言</i></i></h4>
+		{if condition="$Request.session.uid"}
+			<div class='media'>
+				<div class='media-left'>
+					<div class='media-object'>
+						<img src='{$Request.session.uimg}' width='50' height='50'/>
+					</div>
+				</div>
+				<div class='media-body'>
+					<div class="box-content box-login"> 
+						<div class="box-input-block">
+							<div class="box-textarea-block"> 
+								<textarea class="box-textarea J_Textarea" id="J_Textarea" placeholder="说两句吧..." required="required"></textarea>
+							</div>
+							<div class="box-info">
+								<div class="box-operate">
+									<b class="box-username">{$Request.session.name}</b>
+								</div>
+								<div class="box-commentBtn box-commentBtn--able J_PostBtn" id="J_PostBtn">发布评论</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{else /}
+			<div class='media'>
+				<div class='media-left'>
+					<div class='media-object'>
+						<img src='__STATIC__/index/img/avatar.png' width='50' height='50'/>
+					</div>
+				</div>
+				<div class='media-body'>
+					<div class="box-content box-logout"> 
+						<div class="box-textarea-block"> 
+							<textarea class="box-textarea" placeholder="说两句吧..."></textarea> 
+						</div> 
+						<a href="{:url('login/index')}" target="_blank">
+						<span class="box-loginBtn J_PostBtn">登录</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		{/if}
+		<h4>全部评论</h4>
+		<div class="all_message">
+			{volist name="message" id="vo"}
+			<div class='media'>
+				<div class='media-left'>
+					<div class='media-object'>
+						<img src='{$vo.img}' width='50' height='50'/>
+					</div>
+				</div>
+				<div class='media-body'>
+					<div class='media-heading'>
+						{if condition="$vo.messageuid eq '0'"}
+						<p><b class='editor'>{$vo.name}{if condition="$vo.uid eq '9'"} <kbd>管理员</kbd>{/if}</b><i class='time pull-right'>{$vo.time}</i></p>
+						{else /}
+						<p><b class='editor'>{$vo.name}{if condition="$vo.uid eq '9'"} <kbd>管理员</kbd>{/if}</b><i class="jiange">回复</i><img src="{$vo.messageuidimg}" class="huifu_img"><b class='editor'>{$vo.messageuidname}</b><i class='time pull-right'>{$vo.time}</i></p>
+						{/if}
+						<p class='content'>{$vo.content}</p>
+						<p class='time zan'>
+							{if condition="$Request.session.uid"}
+							<span class='J_Vote comment-operate-item comment-operate-up' data-id='{$vo.id}'>{$vo.love}</span>
+							{else/}
+							<span class='comment-operate-item comment-operate-up' data-id='{$vo.id}' onClick="alert('请登录')">{$vo.love}</span>
+							{/if}
+							<span class='J_Reply comment-operate-item comment-operate-reply' data-key='on'> <i class='xs'>回复</i><i class='sq'>收起</i> </span>
+						</p>
+					</div>
+					<div class='box-content box-logout' style='margin-top: 10px;'>
+						<div class='box-textarea-block'>
+							<textarea class='box-textarea' placeholder='说两句吧...' required='required'></textarea>
+						</div>
+						{if condition="$Request.session.uid"}
+							<span class='box-loginBtn J_PostBtn huifu_btn' data-id='{$vo.id}' data-uid='{$vo.uid}'> 回复 </span>
+						{else /}
+							<a href="{:url('login/index')}" target="_blank">
+								<span class='box-loginBtn J_PostBtn huifu_btn' data-id='{$vo.id}' data-uid='{$vo.uid}'> 登录 </span>
+							</a>
+						{/if}
+					</div>
+				</div>
+			</div>
+			{/volist}
+		</div>
+			<div class="text-center load_more">加载更多</div>
+	</div>
+	
+<script>
+$(function(){
+		// 播放界面
+		$('.js').each(function(){
+			$(this).on('click',function(){
+				var a = $(this).attr('data-a');
+				$('iframe').attr('data-a',a);
+				$('iframe').attr('src','https://api.pangujiexi.com/player.php?url='+a);
+				$('.js').css({'color':'#bbb'});
+				$(this).css({'color':'rgb(252,63,76)'});
+			})
+		})
+
+		$('.xianlu-div>div').click(function(){
+			var url = $('iframe').attr('data-a');
+			var api = $(this).attr('data-api');
+			$('iframe').attr('src',api+url);
+		})
+
+		var movie_id = "{$data.id}";
+		var uid = "{$Request.session.uid}";
+
+		//发表评论
+		$('#J_PostBtn').click(function(){
+			if($('#J_Textarea').val()==''){
+				alert('说点什么吧');
+			}else{
+				$.ajax({
+					url : "{:url('index/video/movie_addmessage')}",
+					type : 'POST',
+					data : {
+						content : $('#J_Textarea').val(),
+						uid : uid,
+						movieid : movie_id,
+					},
+					beforeSend : function (jqXHR, settings) {
+						$('.all_message').append("<div class='media' style='height:0;width:0;margin:0;padding:0;'></div>");
+						if(uid){
+							$('#J_PostBtn').addClass('jinyong');
+						}
+					},
+					success : function (response, status) {
+						if(uid){
+							setTimeout(function(){
+								$('#J_PostBtn').removeClass('jinyong');
+							},5000)
+						}
+						var json = $.parseJSON(response);
+						var div = '';
+						div+= "<div class='media show'>";
+						div+= "	<div class='media-left'>";
+						div+= "		<div class='media-object'>";
+						div+= "			<img src='"+json.img+"' width='50' height='50'/>";
+						div+= "		</div>";
+						div+= "	</div>";
+						div+= "	<div class='media-body'>";
+						div+= "		<div class='media-heading'>";
+						div+= "			<p><b class='editor'>"+json.name+"</b><i class='time pull-right'>"+json.time+"</i></p>";
+						div+= "			<p class='content'>"+json.content+"</p>";
+						div+= "			<p class='time zan'>";
+						div+= "				<span class='J_Vote comment-operate-item comment-operate-up' data-id='"+json.id+"'>"+json.love+"</span>";
+						div+= "				<span class='J_Reply comment-operate-item comment-operate-reply' data-key='on'> <i class='xs'>回复</i><i class='sq'>收起</i> </span>";
+						div+= "			</p>";
+						div+= "		</div>";
+						div+= "		<div class='box-content box-logout' style='margin-top: 10px;'>";
+						div+= "			<div class='box-textarea-block'>";
+						div+= "				<textarea class='box-textarea' placeholder='说两句吧...' required></textarea>";
+						div+= "			</div>";
+						div+= "			<span class='box-loginBtn huifu_btn J_PostBtn' data-id='"+json.id+"' data-uid='"+json.uid+"'> 回复 </span>";
+						div+= "		</div>";
+						div+= "	</div>";
+						div+= "</div>";
+						$('.all_message .media').eq(0).before(div);
+						$('.J_Textarea').val("");
+						$('.all_message .media').eq(0).hide().fadeIn(250);
+					}
+				})
+			}
+		})
+
+		$('.all_message').delegate('.huifu_btn','click',function(){
+			var _this = $(this);
+			if(_this.parent().find('textarea').val()==''){
+				alert('说点什么吧');
+			}else{
+
+				$.ajax({
+					url : "{:url('index/video/movie_addmessage2')}",
+					type : 'POST',
+					data : {
+						movieid : movie_id,
+						content : _this.parent().find('textarea').val(),
+						uid : uid,
+						messageid : _this.attr('data-id'),
+						messageuid : _this.attr('data-uid'),
+					},
+					beforeSend : function (jqXHR, settings) {
+						$('.box-textarea').val("");
+						if(uid){
+							_this.addClass('jinyong');
+						}
+					},
+					success : function (response, status) {
+						if(uid){
+							setTimeout(function(){
+								_this.removeClass('jinyong');
+							},5000)
+						}
+						var json2 = $.parseJSON(response);
+						var div2 = "";
+						div2+="<div class='media show'>";
+						div2+="	<div class='media-left'>";
+						div2+="		<div class='media-object'>";
+						div2+="			<img src='{$Request.session.uimg}' width='50' height='50'/>";
+						div2+="		</div>";
+						div2+="	</div>";
+						div2+="	<div class='media-body'>";
+						div2+="		<div class='media-heading'>";
+						div2+="			<p><b class='editor'>{$Request.session.name}</b><i class='jiange'>回复</i><img src='"+json2.messageuidimg+"' class='huifu_img'><b class='editor'>"+json2.messageuidname+"</b><i class='time pull-right'>"+json2.time+"</i></p>";
+						div2+="			<p class='content'>"+json2.content+"</p>";
+						div2+="			<p class='time zan'>";
+						div2+="				<span class='J_Vote comment-operate-item comment-operate-up' data-id='"+json2.id+"'>"+json2.love+"</span>";
+						div2+="				<span class='J_Reply comment-operate-item comment-operate-reply' data-key='on'> <i class='xs'>回复</i><i class='sq'>收起</i> </span>";
+						div2+="			</p>";
+						div2+="		</div>";
+						div2+="		<div class='box-content box-logout' style='margin-top: 10px;'>";
+						div2+="			<div class='box-textarea-block'>";
+						div2+="				<textarea class='box-textarea' placeholder='说两句吧...' required></textarea>";
+						div2+="			</div>";
+						div2+="			<span class='box-loginBtn J_PostBtn huifu_btn' data-id='"+json2.id+"' data-uid='"+json2.uid+"'> 回复 </span>";
+						div2+="		</div>";
+						div2+="	</div>";
+						div2+="</div>";
+						_this.parents('.media').after(div2);
+						_this.parents('.media').next().hide().fadeIn(250);
+					}
+				})
+			}
+		})
+
+		//点赞
+		$('.all_message').delegate('.J_Vote','click',function(){
+			var love_this = $(this);
+			if($(this).attr("date-key")=="on"){
+				$(this).attr("date-key","");
+				$.ajax({
+					url : "{:url('index/video/movie__message_removelove')}",
+					type : "POST",
+					data : {
+						id : love_this.attr('data-id'),
+					},
+					success : function(){
+						var lovenum=Number($(love_this).html())-1;
+						$(love_this).html(lovenum);
+						$(love_this).removeClass('dianzanok');
+					}
+				})
+			}else{
+				$(this).attr("date-key","on");
+				$.ajax({
+					url : "{:url('index/video/movie_message_love')}",
+					type : "POST",
+					data : {
+						id : love_this.attr('data-id'),
+					},
+					success : function(){
+						var lovenum=Number($(love_this).html())+1;
+						$(love_this).html(lovenum);
+						$(love_this).addClass('dianzanok');
+					}
+				})
+			}
+		})
+
+		//回复表单
+		$('.all_message').delegate('.J_Reply','click',function(){if($(this).attr("data-key")=="on"){$('.xs').show();$('.sq').hide();$(this).find('.xs').hide();$(this).find('.sq').show();$('.J_Reply').attr("data-key","on");$(this).attr("data-key","");$('.all_message').find('.box-content').hide();$(this).parents('.media-body').find('.box-content').fadeIn(250);}else{$('.xs').show();$('.sq').hide();$(this).attr("data-key","on");$(this).parents('.media-body').find('.box-content').hide();}})
+
+
+
+		var count = {$count};
+		var page = 2;
+		if (page > count) {
+			$('.load_more').off('click');
+			$('.load_more').hide();
+		}
+		$('.load_more').on('click', function () {
+			$('.load_more').attr('disabled',"true");//防止连续点击出现的BuG
+			$.ajax({
+				url : "{:url('index/video/index')}",
+				type : "POST",
+				data : {
+					page : page,
+					id : {$data.id},
+				},
+				success : function(response){
+					var json3 = $.parseJSON(response);
+					$.each(json3,function(index,value){
+						var div3 = '';
+						div3 +="<div class='media'>";
+						div3 +="	<div class='media-left'>";
+						div3 +="		<div class='media-object'>";
+						div3 +="			<img src='"+value.img+"' width='50' height='50'/>";
+						div3 +="		</div>";
+						div3 +="	</div>";
+						div3 +="	<div class='media-body'>";
+						 div3 +="		<div class='media-heading'>";
+						 				if(value.messageuid==0){
+						 div3 +="			<p><b class='editor'>"+value.name+"</b><i class='time pull-right'>"+value.time+"</i></p>";
+						 				}else{
+						 div3 +="			<p><b class='editor'>"+value.name+"</b><i class='jiange'>回复</i><img src='"+value.messageuidimg+"'' class='huifu_img'><b class='editor'>"+value.messageuidname+"</b><i class='time pull-right'>"+value.time+"</i></p>";
+						 				}
+						 div3 +="			<p class='content'>"+value.content+"</p>";
+						 div3 +="			<p class='time zan'>";
+						 div3 +="				<span class='J_Vote comment-operate-item comment-operate-up' data-id='"+value.id+"'>"+value.love+"</span>";
+						 div3 +="				<span class='J_Reply comment-operate-item comment-operate-reply' data-key='on'> <i class='xs'>回复</i><i class='sq'>收起</i> </span>";
+						 div3 +="			</p>";
+						 div3 +="		</div>";
+						 div3 +="		<div class='box-content box-logout' style='margin-top: 10px;'>";
+						 div3 +="			<div class='box-textarea-block'>";
+						 div3 +="				<textarea class='box-textarea' placeholder='说两句吧...'></textarea>";
+						 div3 +="			</div>";
+						 					if($('.load_more').attr('data-uid')){
+						 div3 +="			<span class='box-loginBtn J_PostBtn huifu_btn' data-id='"+value.id+"' data-uid='"+value.uid+"'> 回复 </span>";
+						 					}else{												
+						 div3 +="				<a href='{:url('login/index')}''>";
+						 div3 +="					<span class='box-loginBtn J_PostBtn huifu_btn' data-id='"+value.id+"' data-uid='"+value.uid+"'> 登录 </span>";
+						 div3 +="				</a>";
+						 					}
+						 div3 +="		</div>";
+						 div3 +="	</div>";
+						 div3 +="</div>";
+						$('.all_message').append(div3);
+					})
+					$('.load_more').removeAttr("disabled");
+					$('.load_more').html('加载更多');
+					page++;
+					if (page > count) {
+						$('.load_more').off('click');
+						$('.load_more').hide();
+					}
+				}
+			})
+		});
+
+})
+</script>
+</body>
+</html>

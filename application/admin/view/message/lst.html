@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__STATIC__/admin/style/bootstrap.css" rel="stylesheet">
+    <link href="__STATIC__/admin/style/font-awesome.css" rel="stylesheet">
+    <link href="__STATIC__/admin/style/weather-icons.css" rel="stylesheet">
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__STATIC__/admin/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__STATIC__/admin/style/demo.css" rel="stylesheet">
+    <link href="__STATIC__/admin/style/typicons.css" rel="stylesheet">
+    <link href="__STATIC__/admin/style/animate.css" rel="stylesheet">
+    <style>
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus{
+    background-color: #2dc3e8;
+    border-color: #2dc3e8;
+}
+.pagination{
+    margin-top: 20px;
+}
+.modal-dialog{
+    width: 70%;
+}
+#myModalLabel{
+    display: inline-block;
+}
+.table,th{
+    text-align: center;
+}
+
+    </style>
+</head>
+<body>
+    
+    {include file="common/top" /}
+
+    <div class="main-container container-fluid">
+        <div class="page-container">
+            {include file="common/left" /}
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                       <li><a href="#">系统</a></li>
+                        <li class="active">评论管理</li>
+                    </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-body">
+                <div class="flip-scroll">
+                    <table class="table table-bordered table-hover">
+                        <thead class="">
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">评论所属</th>
+                                <th class="text-center">评论者</th>
+                                <th class="text-center">评论</th>
+                                <th class="text-center">评论时间</th>
+                                <th class="text-center">赞</th>
+                                <th class="text-center">回复评论ID</th>
+                                <th class="text-center">回复评论的用户</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="data" id="vo"}
+                            <tr>
+                                <td align="center">{$vo.id}</td>
+                                <td align="center">{$vo.movieid}</td>
+                                <td align="center">{$vo.uid}</td>
+                                <td align="center">{$vo.content}</td>
+                                <td align="center">{$vo.time}</td>
+                                <td align="center">{$vo.love}</td>
+                                <td align="center">{$vo.messageid}</td>
+                                <td align="center">{$vo.messageuid}</td>
+                                <td align="center">
+                                    <a target="_blank" href="{:url('index/video/index',array('id'=>$vo['movieid']))}" class="ck btn btn-Default btn-sm">查看</a>
+                                    <a href="#" onClick="warning('确实要删除吗', '{:url('message/del',array('id'=>$vo['id']))}')" class="btn btn-danger btn-sm">删除</a>
+                                </td>
+                            </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                    {$data->render()}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+        </div>  
+    </div>
+
+
+        <!--Basic Scripts-->
+    <script src="__STATIC__/admin/style/jquery_002.js"></script>
+    <script src="__STATIC__/admin/style/bootstrap.js"></script>
+    <!--Beyond Scripts-->
+    <script src="__STATIC__/admin/style/beyond.js"></script>
+</body>
+</html>

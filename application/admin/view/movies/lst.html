@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__STATIC__/admin/style/bootstrap.css" rel="stylesheet">
+    <link href="__STATIC__/admin/style/font-awesome.css" rel="stylesheet">
+    <link href="__STATIC__/admin/style/weather-icons.css" rel="stylesheet">
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__STATIC__/admin/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__STATIC__/admin/style/demo.css" rel="stylesheet">
+    <link href="__STATIC__/admin/style/typicons.css" rel="stylesheet">
+    <link href="__STATIC__/admin/style/animate.css" rel="stylesheet">
+    <style>
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus{
+    background-color: #2dc3e8;
+    border-color: #2dc3e8;
+}
+.pagination{
+    margin-top: 20px;
+}
+.modal-dialog{
+    width: 70%;
+}
+#myModalLabel{
+    display: inline-block;
+}
+.table,th{
+    text-align: center;
+}
+
+    </style>
+</head>
+<body>
+    
+    {include file="common/top" /}
+
+    <div class="main-container container-fluid">
+        <div class="page-container">
+            {include file="common/left" /}
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                       <li><a href="#">系统</a></li>
+                        <li class="active">影片管理</li>
+                    </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+                    
+<button type="button" tooltip="添加影片" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('movies/add')}'"> <i class=""></i> Add
+</button>
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-body">
+                <div class="flip-scroll">
+                    <table class="table table-bordered table-hover">
+                        <thead class="">
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">分类</th>
+                                <th class="text-center">名称</th>
+                                <th class="text-center">链接</th>
+                                <th class="text-center">图片</th>
+                                <th class="text-center">集数</th>
+                                <th class="text-center">评分</th>
+                                <th class="text-center">年份</th>
+                                <th class="text-center">简介</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="data" id="vo"}
+                            <tr>
+                                <td align="center">{$vo.id}</td>
+                                <td align="center">{$vo.name}</td>
+                                <td align="center">{$vo.title}</td>
+                                <td align="center"><a href="{$vo.a}">{$vo.a}</a></td>
+                                <td align="center"><img src="{$vo.img}" width="20"></td>
+                                <td align="center">{$vo.num}</td>
+                                <td align="center">{$vo.score}</td>
+                                <td align="center">{$vo.year}</td>
+                                <td align="center">{$vo.des}</td>
+                                <td align="center">
+                                    <a href="" data-num="{$vo.title} · {$vo.num}" data-id="{$vo.id}" class="ck btn btn-Default btn-sm" data-toggle="modal" data-target="#myModal">查看</a>
+                                    <a href="{:url('movies/edit',array('id'=>$vo['id']))}" class="btn btn-primary btn-sm">编辑</a>
+                                    <a href="#" onClick="warning('确实要删除吗', '{:url('movies/del',array('id'=>$vo['id']))}')" class="btn btn-danger btn-sm">删除</a>
+                                </td>
+                            </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                    {$data->render()}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+        </div>  
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel"></h4>
+          </div>
+          <div class="modal-body">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>所属影视ID</th>
+                    <th>所属影视标题</th>
+                    <th>链接</th>
+                    <th>第几集</th>
+                    <th>简介</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody class="tbody">
+                </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+        <!--Basic Scripts-->
+    <script src="__STATIC__/admin/style/jquery_002.js"></script>
+    <script src="__STATIC__/admin/style/bootstrap.js"></script>
+    <!--Beyond Scripts-->
+    <script src="__STATIC__/admin/style/beyond.js"></script>
+    
+<script>
+$(function(){
+    $('.ck').each(function () {
+        $(this).on('click',function(){
+            $('.modal-title').text($(this).attr('data-num'));
+            $('.tbody').text('');
+            $.ajax({
+                url : "{:url('admin/movies/ck')}",
+                type : "POST",
+                data : {
+                    id : $(this).attr('data-id'),
+                },
+                beforeSend : function (jqXHR, settings) {
+                },
+                success : function(response,status,xhr){
+                    var json = $.parseJSON(response);
+                    $.each(json, function (index, value) {
+                        var div = '';
+                        div += '<tr>';
+                        div += '    <td>'+value.id+'</td>';
+                        div += '    <td>'+value.moviesid+'</td>';
+                        div += '    <td>'+value.moviestitle+'</td>';
+                        div += `    <td><a href="${value.a}">${value.a}</a></td>`;
+                        div += '    <td>'+value.num+'</td>';
+                        div += '    <td>'+value.des+'</td>';
+                        div += '    <td>A+</td>';
+                        div += '</tr>';
+                        $('.tbody').append(div);
+                    });
+                }
+            })
+        })
+    })
+
+})
+
+</script>
+
+</body>
+</html>

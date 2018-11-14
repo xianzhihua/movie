@@ -1,0 +1,137 @@
+<nav class="navbar navbar-default" style="background-color: white;padding: 20px 0px;box-shadow: 0 1px 3px rgba(26,26,26,.1);border: none;">
+  <div class="container">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="" href="{:url('/')}" style="line-height: 42px;">
+        <img alt="Brand" src="__STATIC__/index/img/logo.png" height="50">
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="{:url('/')}">首页</a></li>
+        <li><a href="{:url('more/index',array('classid'=>'1'))}">电影</a></li>
+        <li><a href="{:url('more/index',array('classid'=>'2'))}">电视剧</a></li>
+        <li><a href="{:url('more/index',array('classid'=>'3'))}">动漫</a></li>
+      </ul>
+      <form class="navbar-form navbar-left" method="get" action="{:url('search/index')}">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="请输入关键字" name="keywords">
+        </div>
+        <button type="submit" class="btn btn-default">搜索</button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        {if condition="$Request.session.username"}
+          <li class="dropdown">
+            <a style="background: url({$Request.session.uimg}) no-repeat;background-size: cover;margin-top: 5px;width: 40px;height: 40px;border-radius: 50%;" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+            <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="javascript:;">欢迎你,{$Request.session.username}</a></li>
+                <li><a href="javascript:;" class="editme" data-id="{$Request.session.uid}" data-toggle="modal" data-target="#myModal">修改信息</a></li>
+                <li><a href="{:url('logout/index')}">退出登录</a></li>
+            </ul>
+          </li>
+        {else /}
+          <li><a target="_blank" href="{:url('login/index')}">登录</a></li>
+        {/if}
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+  </div>
+</nav>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">修改信息</h4>
+      </div>
+      <form action="{:url('index/edit/edit')}" method="post">
+        <div class="modal-body">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="submit" class="btn btn-primary editme-btn">修改</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="gotop"><i class="glyphicon glyphicon-arrow-up"></i></div>
+
+
+
+
+
+
+<script>
+$('.gotop').click(function(){
+    $("html, body").animate({
+      scrollTop: 0
+    },200);
+})
+
+$(window).scroll(function(){  
+    if($(window).scrollTop()>300){  
+      $('.gotop').fadeIn(300);  
+    }else{
+      $('.gotop').fadeOut(200);
+    }  
+});
+
+$('.editme-btn').attr('disabled',"true");
+$('.editme').click(function(){
+  $('.modal-body').html('');
+  $.ajax({
+    url : "{:url('index/edit/index')}",
+    type : "POST",
+    data : {
+      id : $(this).attr('data-id'),
+    },
+    beforeSend : function (jqXHR, settings) {
+    },
+    success : function(response){
+      $('.editme-btn').removeAttr("disabled");
+      var div ='';
+      
+      div+='  <div class="form-group">';
+      div+='    <label for="password">密码</label>';
+      div+='    <input type="password" name="password" class="form-control" id="password" placeholder="填写则修改，不填则不修改">';
+      div+='  </div>';
+      div+='  <div class="form-group">';
+      div+='    <label for="name">昵称</label>';
+      div+='    <input type="name" name="name" class="form-control" id="name" value="'+response.name+'">';
+      div+='    <input type="hidden" name="id" class="form-control" id="id" value="'+response.id+'">';
+      div+='    <input type="hidden" name="username" class="form-control" id="username" value="'+response.username+'">';
+      div+='  </div>';
+      div+='  <div class="form-group">';
+      div+='    <label for="email">邮箱</label>';
+      div+='    <input type="email" name="email" class="form-control" id="email" value="'+response.email+'">';
+      div+='  </div>';
+      div+='  <div class="form-group">';
+      div+='    <label for="img">头像 (头像出现破碎就换个网站的头像)</label>';
+      div+='    <input type="type" name="img" class="form-control" id="img" value="'+response.img+'" autocomplete="off">';
+      div+='  </div>';
+      div+='  <div class="form-group">';
+      div+='    <img src="'+response.img+'" width="100%">';
+      div+='  </div>';
+      
+      $('.modal-body').append(div);
+    }
+  })
+})
+</script>
